@@ -16,7 +16,7 @@ function App() {
         />
         <Route
           path="/about"
-          component={About}
+          render={() => <About showHeader={true}/>}
         />
       </PageWrapper>
     </Router>

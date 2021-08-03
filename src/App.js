@@ -5,6 +5,7 @@ import {BrowserRouter as Router, Route, Link} from 'react-router-dom'
 // Pages
 import Home from './components/Pages/Home'
 import About from './components/Pages/About'
+import Contact from './components/Pages/Contact'
 
 function App() {
   return (
@@ -17,6 +18,10 @@ function App() {
         <Route
           path="/about"
           render={() => <About showHeader={true}/>}
+        />
+        <Route
+          path="/contact"
+          component={Contact}
         />
       </PageWrapper>
     </Router>

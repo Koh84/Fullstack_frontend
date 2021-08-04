@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import Field from '../Common/Field'
+import Field from '../Common/Field';
+import {withFormik} from 'formik';
 
 const fields = {
     sections: [
@@ -15,15 +16,6 @@ const fields = {
 }
 
 class Contact extends Component {
-    constructor(props){
-        super(props);
-        this.state = {
-            name: '',
-            email: '',
-            phone: '',
-            message: ''
-        }
-    }
 
     submitForm = (e) => {
         e.preventDefault();
@@ -49,10 +41,12 @@ class Contact extends Component {
                                                     return <Field 
                                                                 {...field} 
                                                                 key={i}
-                                                                value={this.state[field.name]}
-                                                                onChange={(e) => this.setState({
-                                                                    [field.name]: e.target.value
-                                                                })}
+                                                                value={this.props.values[field.name]}
+                                                                name={field.name}
+                                                                onChange={this.props.handleChange}
+                                                                onBlur={this.props.handleBlur}
+                                                                touched={(this.props.touched[field.name])}
+                                                                errors={this.props.errors[field.name]}
                                                             />
                                                 })}
                                             </div>
@@ -87,4 +81,24 @@ class Contact extends Component {
     }
 }
 
-export default Contact
+export default withFormik({
+    mapPropsToValues: () => ({
+        name: '',
+        email: '',
+        phone: '',
+        message: ''
+    }),
+    validate: values => {
+        const errors = {};
+        Object.keys(values).map(v => {
+            if(!values[v]){
+                errors[v] = "Required";
+            }
+        })
+        return errors;
+    },
+    handleSubmit: (values, { setSubmitting }) => {
+        console.log("values :", values);
+        alert("You've submitted the form", JSON.stringify(values));
+    }
+})(Contact)

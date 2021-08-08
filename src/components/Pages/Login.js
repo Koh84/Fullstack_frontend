@@ -1,7 +1,9 @@
+import { connect } from 'react-redux';
 import React, {Component} from 'react';
 import Field from '../Common/Field';
 import {withFormik} from 'formik';
 import * as Yup from 'yup';
+import * as AuthActions from '../../store/actions/authActions';
 
 const fields = [
     { name: 'email', elementName: 'input', type: 'email', placeholder: 'Your email' },
@@ -19,7 +21,10 @@ class Login extends Component {
                             <h1>Login</h1>
                         </div>
                         <div className="row">
-                            <form onSubmit={this.props.handleSubmit}>
+                                <form onSubmit={e => {
+                                    e.preventDefault();
+                                    this.props.login(this.props.values.email, this.props.values.password)
+                                }}>
                                 {fields.map((f, i) => {
                                     return (
                                         <div className="col-md-12" key={i}>
@@ -49,7 +54,26 @@ class Login extends Component {
     }
 }
 
-export default withFormik({
+// what app wide state do we want
+// we want state.auth and we call it auth in this component
+const mapStateToProps = state => {
+    return {
+        auth: state.auth
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        login: (email, pass) => {
+            dispatch(AuthActions.login(email, pass));
+        }
+    }
+}
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(withFormik({
     mapPropsToValues: () => ({
         email: '',
         password: ''
@@ -61,4 +85,4 @@ export default withFormik({
     handleSubmit: (values, { setSubmitting }, login) => {
         console.log("Login attempt :", values);
     }
-})(Login);
+})(Login));

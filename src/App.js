@@ -1,4 +1,5 @@
 import AdminWrapper from './components/AdminWrapper'
+import LoginWrapper from './components/LoginWrapper'
 import PageWrapper from './components/PageWrapper'
 import React, { Component } from 'react';
 import {BrowserRouter as Router, Route, Link} from 'react-router-dom'
@@ -20,9 +21,17 @@ class App extends Component {
           path="/admin"
           render={(props) => {
             return(
-            <AdminWrapper>
-              {this.props.auth.token ? <Dashboard/> : <Login/>}
-            </AdminWrapper>)}
+              <div>
+              {this.props.auth.token ? 
+                <AdminWrapper>
+                  <Dashboard/> 
+                </AdminWrapper>
+              : 
+                <LoginWrapper>
+                  <Login/>
+                </LoginWrapper>}
+              </div>
+            )}
             }
         />
 

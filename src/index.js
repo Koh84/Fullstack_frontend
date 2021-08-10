@@ -3,20 +3,19 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import {createStore, applyMiddleware} from 'redux';
-import rootReducer from './store/reducers';
 import { Provider } from 'react-redux';
-import thunk from 'redux-thunk';
 
-const store = createStore(
-  rootReducer,
-  applyMiddleware(thunk)
-);
+import configureStore from './store/configureStore';
+import {PersistGate} from 'redux-persist/integration/react';
+
+const {store, persistor} = configureStore();
 
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <App />
+      <PersistGate loading={null} persistor={persistor}>
+        <App />
+      </PersistGate>
     </Provider>
   </React.StrictMode>,
   document.getElementById('root')
